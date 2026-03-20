@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UGV01 RPi Control</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <style type="text/css">
+    html {
+        display: inline-block;
+        text-align: center;
+        font-family: sans-serif;
+    }
+    body {
+        background-image: -webkit-linear-gradient(#3F424F, #1E212E);
+        font-family: "roboto", "sans-serif";
+        font-weight: lighter;
+        background-position: center 0;
+        background-attachment: fixed;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 14px;
+    }
+    .cc-btn {
+        border: 0;
+        cursor: pointer;
+        color: #fff;
+        background: rgba(164,169,186,0);
+        font-size: 1em;
+        width: 100px;
+        height: 100px;
+    }
+    .cc-middle{
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: rgba(94,98,112,0.8);
+    }
+    .cc-btn:hover svg, .cc-middle:hover {
+        opacity: 0.5;
+    }
+    .cc-btn:active svg, .cc-middle:hover{
+        opacity: 0.5;
+    }
+    .controlor-c > div{
+        width: 300px;
+        height: 300px;
+        background-color: rgba(94,98,112,0.2);
+        border-radius: 40px;
+        box-shadow: 10px 10px 10px rgba(0,0,0,0.05);
+        margin: auto;
+    }
+    .controlor-c > div > div{
+        display: flex;
+    }
+    main {
+        width: 960px;
+        margin: auto;
+    }
+    section{margin: 40px 0;}
+    .for-move {
+        display: flex;
+        align-items: center;
+    }
+    .for-move-a, .for-move-b{
+        flex: 1;
+        margin: 0 20px;
+    }
+    .h2-tt {
+        font-size: 2em;
+        font-weight: normal;
+        color: rgba(255, 255, 255, 0.8);
+        text-transform: uppercase;
+    }
+    .info-device-box .info-box{display: flex;}
+    .info-device-box .info-box{padding: 20px 0;}
+    .num-box-big > div, .num-box-sma > div{flex: 1;}
+    .num-box-big > div:first-child{border-right: 1px solid rgba(216,216,216,0.1);}
+    .num-box-mid {
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .num-box-mid div{
+        width:33.3333%;
+        margin: 20px 0;
+    }
+    .info-device-box .info-box > div > span {
+        display: block;
+    }
+    .info-box {
+        background-image: linear-gradient(to right, rgba(94, 98, 112, 0.3), rgba(75, 80, 95, 0.3)) ;
+        margin: 20px auto;
+        border: 1px solid rgba(216, 216, 216, 0.1);
+        box-shadow: 10px 10px 10px rgba(0,0,0,0.05);
+        border-radius: 4px;
+        color: rgba(255,255,255,0.5);
+    }
+    .big-num{font-size: 3em;}
+    .mid-num{font-size: 2em;}
+    .sma-num{font-size: 1.2em;}
+    .num-color{
+        background-image: linear-gradient(rgba(255,255,255,1),rgba(255,255,255,0.5));
+        background-clip: text;
+        color:transparent;
+        -webkit-background-clip: text;
+        font-weight: 900;
+        line-height: 1em;
+        margin: 0.5em 0;
+    }
+    .num-color-red{
+        background-image: linear-gradient(rgba(181,104,108,1),rgba(181,104,108,0.5));
+        background-clip: text;
+        color:transparent;
+        -webkit-background-clip: text;
+        font-weight: 900;
+        line-height: 1em;
+        margin: 0.5em 0;
+    }
+    .controlor > div {margin: 80px 0;}
+    .json-cmd-info{
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .json-cmd-info > div {
+        width: 33.33333%;
+        padding: 10px 0;
+    }
+    .json-cmd-info p{
+        line-height: 30px;
+        margin: 0;
+    }
+    .json-cmd-info p span {
+        display: block;
+        color: rgba(255,255,255,0.8);
+    }
+    .small-btn{
+        color: rgba(255,255,255,0.8);
+        background-color: #5E6270;
+        border: none;
+        height: 48px;
+        border-radius: 4px;
+    }
+    .small-btn-active{
+        background-color: rgba(38,152,234,0.1);
+        color: #2698EA;
+        border: 1px solid #2698EA;
+        height: 48px;
+        border-radius: 4px;
+    }
+    .feedb-p input{
+        width: 100%;
+        height: 46px;
+        background-color: rgba(0,0,0,0);
+        padding: 0 10px;
+        border: 1px solid rgba(194,196,201,0.15);
+        border-radius: 4px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 1.2em;
+        margin-right: 10px;
+    }
+    .control-speed > div {
+        width: 290px;
+        margin: auto;
+    }
+    .control-speed > div > div{display: flex;}
+    .control-speed label {flex: 1;}
+    .small-btn, .small-btn-active{
+        width: 90px;
+    }
+    .feedb-p{ display: flex;}
+    .fb-input-info{
+        margin: 0 20px;
+    }
+    .fb-info {margin: 20px;}
+    .fb-info > span{line-height: 2.4em;}
+    .btn-send:hover, .small-btn:hover{background-color: #2698EA;}
+    .btn-send:active, .small-btn:active{background-color: #1b87d4;}
+    .w-btn{
+        color: #2698EA;
+        background: transparent;
+        padding: 10px;
+        border: none;
+        cursor: pointer;
+    }
+    .w-btn:hover{color: #2698EA;}
+    .w-btn:active{color: #1b87d4;}
+    .status-bar {
+        background: rgba(38,152,234,0.15);
+        border: 1px solid rgba(38,152,234,0.3);
+        border-radius: 4px;
+        padding: 8px 16px;
+        margin: 10px auto;
+        max-width: 400px;
+        color: rgba(255,255,255,0.7);
+    }
+    .status-bar .connected { color: #4CAF50; }
+    .status-bar .disconnected { color: #f44336; }
+    @media screen and (min-width: 768px) and (max-width: 1200px){
+        body{font-size: 16px;}
+        main { width: 100%; }
+        .for-move { display: block; }
+        .json-cmd-info{display: block;}
+        .json-cmd-info p span{display: inline;}
+        .json-cmd-info > div{
+            display: flex;
+            width: auto;
+            padding: 20px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .control-speed > div{width: 600px;}
+        section{margin: 20px 0;}
+    }
+    @media screen and (min-width: 360px) and (max-width: 767px){
+        main { width: 100%; }
+        .for-move { display: block; }
+        .json-cmd-info{display: block;}
+        .json-cmd-info p span{display: inline;}
+        .json-cmd-info > div{
+            display: flex;
+            width: auto;
+            padding: 20px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        section{margin: 10px 0;}
+        .info-box{margin: 10px auto;}
+        .info-device-box .info-box{padding: 10px;}
+        .num-box-mid div{margin: 10px 0;}
+        .controlor-c > div{
+            width: 270px;
+            height: 270px;
+        }
+        .cc-btn{
+            width: 90px;
+            height: 90px;
+        }
+        .big-num{font-size: 2em;}
+        .controlor > div{margin: 40px 0;}
+    }
+    </style>
+</head>
+<body>
+    <main>
+        <section>
+            <div>
+                <h2 class="h2-tt">UGV01 Control Panel</h2>
+                <div class="status-bar">
+                    Board: <span id="connStatus" class="connected">polling...</span>
+                </div>
+            </div>
+            <div class="for-move">
+                <div class="for-move-a">
+                    <div class="info-device-box">
+                        <div class="info-box num-box-big">
+                            <div>
+                                <span class="big-num num-color" id="V">--</span>
+                                <span>VOLTAGE</span>
+                            </div>
+                            <div>
+                                <span class="big-num num-color" id="RSSI">--</span>
+                                <span>RSSI</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-device-box">
+                        <div class="info-box num-box-mid">
+                            <div>
+                                <span class="num-color mid-num" id="r">--</span>
+                                <span>ROLL</span>
+                            </div>
+                            <div>
+                                <span class="num-color mid-num" id="p">--</span>
+                                <span>PITCH</span>
+                            </div>
+                            <div>
+                                <span class="num-color mid-num" id="y">--</span>
+                                <span>YAW</span>
+                            </div>
+                            <div>
+                                <span class="num-color mid-num" id="mX">--</span>
+                                <span>MAGN_X</span>
+                            </div>
+                            <div>
+                                <span class="num-color mid-num" id="mY">--</span>
+                                <span>MAGN_Y</span>
+                            </div>
+                            <div>
+                                <span class="num-color mid-num" id="mZ">--</span>
+                                <span>MAGN_Z</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="for-move-b controlor">
+                    <div class="controlor-c">
+                        <div>
+                            <div>
+                                <label><button class="cc-btn" onmousedown="cmdSend(1,0.5,1);" ontouchstart="cmdSend(1,0.5,1);" onmouseup="cmdSend(1,0,0);" ontouchend="cmdSend(1,0,0);">&#8598;</button></label>
+                                <label><button class="cc-btn" onmousedown="cmdSend(1,1,1);" ontouchstart="cmdSend(1,1,1);" onmouseup="cmdSend(1,0,0);" ontouchend="cmdSend(1,0,0);">&#9650;</button></label>
+                                <label><button class="cc-btn" onmousedown="cmdSend(1,1,0.5);" ontouchstart="cmdSend(1,1,0.5);" onmouseup="cmdSend(1,0,0);" ontouchend="cmdSend(1,0,0);">&#8599;</button></label>
+                            </div>
+                            <div>
+                                <label><button class="cc-btn" onmousedown="cmdSend(1,-1,1);" ontouchstart="cmdSend(1,-1,1);" onmouseup="cmdSend(1,0,0);" ontouchend="cmdSend(1,0,0);">&#9664;</button></label>
+                                <label><button class="cc-btn cc-middle" onmousedown="cmdSend(1,0,0);" ontouchstart="cmdSend(1,0,0);">STOP</button></label>
+                                <label><button class="cc-btn" onmousedown="cmdSend(1,1,-1);" ontouchstart="cmdSend(1,1,-1);" onmouseup="cmdSend(1,0,0);" ontouchend="cmdSend(1,0,0);">&#9654;</button></label>
+                            </div>
+                            <div>
+                                <label><button class="cc-btn" onmousedown="cmdSend(1,-0.5,-1);" ontouchstart="cmdSend(1,-0.5,-1);" onmouseup="cmdSend(1,0,0);" ontouchend="cmdSend(1,0,0);">&#8601;</button></label>
+                                <label><button class="cc-btn" onmousedown="cmdSend(1,-1,-1);" ontouchstart="cmdSend(1,-1,-1);" onmouseup="cmdSend(1,0,0);" ontouchend="cmdSend(1,0,0);">&#9660;</button></label>
+                                <label><button class="cc-btn" onmousedown="cmdSend(1,-1,-0.5);" ontouchstart="cmdSend(1,-1,-0.5);" onmouseup="cmdSend(1,0,0);" ontouchend="cmdSend(1,0,0);">&#8600;</button></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-speed">
+                        <div>
+                            <div id="device-speed-btn">
+                                <label><button name="speedbtn" class="small-btn" onclick="cmdSend(2,0,0);">SLOW</button></label>
+                                <label><button name="speedbtn" class="small-btn" onclick="cmdSend(2,1,1);">MIDDLE</button></label>
+                                <label><button name="speedbtn" class="small-btn" onclick="cmdSend(2,2,2);">FAST</button></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="fb-info">
+                <h2 class="h2-tt">Feedback</h2>
+                <span id="fbInfo">JSON feedback shows here.</span>
+            </div>
+            <div class="fb-input-info">
+                <div class="feedb-p">
+                    <input type="text" id="jsonData" placeholder="Input JSON command here">
+                    <label><button class="small-btn btn-send" onclick="jsonSend();">SEND</button></label>
+                </div>
+                <div class="info-box json-cmd-info">
+                    <div><p>EMERGENCY_STOP: <span id="cmd0">{"T":0}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd0');">INPUT</button></div>
+                    <div><p>SPEED_INPUT: <span id="cmd1">{"T":1,"L":0.5,"R":0.5}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd1');">INPUT</button></div>
+                    <div><p>PID_SET: <span id="cmd2">{"T":2,"P":170,"I":90}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd2');">INPUT</button></div>
+                </div>
+                <div class="info-box json-cmd-info">
+                    <div><p>OLED_SET: <span id="cmd3">{"T":3,"lineNum":0,"Text":"hello"}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd3');">INPUT</button></div>
+                    <div><p>OLED_DEFAULT: <span id="cmd-3">{"T":-3}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd-3');">INPUT</button></div>
+                </div>
+                <div class="info-box json-cmd-info">
+                    <div><p>PWM_SERVO_CTRL: <span id="cmd40">{"T":40,"pos":90,"spd":30}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd40');">INPUT</button></div>
+                    <div><p>PWM_SERVO_MID: <span id="cmd-4">{"T":-4}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd-4');">INPUT</button></div>
+                </div>
+                <div class="info-box json-cmd-info">
+                    <div><p>BUS_SERVO_CTRL: <span id="cmd50">{"T":50,"id":1,"pos":2047,"spd":500,"acc":30}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd50');">INPUT</button></div>
+                    <div><p>BUS_SERVO_MID: <span id="cmd-5">{"T":-5,"id":1}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd-5');">INPUT</button></div>
+                    <div><p>BUS_SERVO_SCAN: <span id="cmd52">{"T":52,"num":20}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd52');">INPUT</button></div>
+                    <div><p>BUS_SERVO_INFO: <span id="cmd53">{"T":53,"id":1}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd53');">INPUT</button></div>
+                    <div><p>BUS_SERVO_ID_SET: <span id="cmd54">{"T":54,"old":1,"new":2}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd54');">INPUT</button></div>
+                    <div><p>BUS_SERVO_TORQUE: <span id="cmd55">{"T":55,"id":1,"status":1}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd55');">INPUT</button></div>
+                    <div><p>TORQUE_LIMIT: <span id="cmd56">{"T":56,"id":1,"limit":500}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd56');">INPUT</button></div>
+                    <div><p>SERVO_MODE: <span id="cmd57">{"T":57,"id":1,"mode":0}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd57');">INPUT</button></div>
+                </div>
+                <div class="info-box json-cmd-info">
+                    <div><p>INA219_INFO: <span id="cmd70">{"T":70}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd70');">INPUT</button></div>
+                    <div><p>IMU_INFO: <span id="cmd71">{"T":71}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd71');">INPUT</button></div>
+                    <div><p>ENCODER_INFO: <span id="cmd73">{"T":73}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd73');">INPUT</button></div>
+                    <div><p>DEVICE_INFO: <span id="cmd74">{"T":74}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd74');">INPUT</button></div>
+                </div>
+                <div class="info-box json-cmd-info">
+                    <div><p>IO_IR_CUT: <span id="cmd80">{"T":80,"status":1}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd80');">INPUT</button></div>
+                </div>
+                <div class="info-box json-cmd-info">
+                    <div><p>SET_SPD_RATE: <span id="cmd901">{"T":901,"L":1.0,"R":1.0}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd901');">INPUT</button></div>
+                    <div><p>GET_SPD_RATE: <span id="cmd902">{"T":902}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd902');">INPUT</button></div>
+                    <div><p>SPD_RATE_SAVE: <span id="cmd903">{"T":903}</span></p><button class="w-btn" onclick="cmdFill('jsonData','cmd903');">INPUT</button></div>
+                </div>
+            </div>
+        </section>
+    </main>
+<script>
+    var cmdA = 1, cmdB = 0, cmdC = 0;
+
+    setInterval(function() { cmdSend(cmdA, cmdB, cmdC); }, 1000);
+    setInterval(function() { infoUpdate(); }, 500);
+
+    function cmdFill(inputId, srcId) {
+        document.getElementById(inputId).value = document.getElementById(srcId).innerHTML;
+    }
+
+    function jsonSend() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "/js?json=" + encodeURIComponent(document.getElementById('jsonData').value), true);
+        xhttp.send();
+        setTimeout(function() {
+            var fb = new XMLHttpRequest();
+            fb.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("fbInfo").innerHTML = this.responseText;
+                }
+            };
+            fb.open("GET", "/jsfb", true);
+            fb.send();
+        }, 300);
+    }
+
+    function infoUpdate() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                try {
+                    var j = JSON.parse(this.responseText);
+                    document.getElementById("V").innerHTML = j.V;
+                    if (j.V < 11.06) {
+                        document.getElementById("V").className = "big-num num-color-red";
+                    } else {
+                        document.getElementById("V").className = "big-num num-color";
+                    }
+                    document.getElementById("r").innerHTML = j.r;
+                    document.getElementById("p").innerHTML = j.p;
+                    document.getElementById("y").innerHTML = j.y;
+                    document.getElementById("mX").innerHTML = j.mX;
+                    document.getElementById("mY").innerHTML = j.mY;
+                    document.getElementById("mZ").innerHTML = j.mZ;
+                    document.getElementById("connStatus").innerHTML = "connected";
+                    document.getElementById("connStatus").className = "connected";
+                } catch(e) {
+                    document.getElementById("connStatus").innerHTML = "error";
+                    document.getElementById("connStatus").className = "disconnected";
+                }
+            }
+        };
+        xhttp.onerror = function() {
+            document.getElementById("connStatus").innerHTML = "disconnected";
+            document.getElementById("connStatus").className = "disconnected";
+        };
+        xhttp.open("GET", "/deviceInfo", true);
+        xhttp.send();
+    }
+
+    function cmdSend(inputA, inputB, inputC) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/cmd?inputA=" + inputA + "&inputB=" + inputB + "&inputC=" + inputC, true);
+        xhr.send();
+        cmdA = inputA;
+        cmdB = inputB;
+        cmdC = inputC;
+    }
+</script>
+</body>
+</html>
